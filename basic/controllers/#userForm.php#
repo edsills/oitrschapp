@@ -1,0 +1,13 @@
+<?php
+
+namespace app\controllers;
+
+use Yii;
+use Yii\web\Controller;
+use app\models\PI;
+
+class PIController extends Controller
+{
+}
+
+?>
