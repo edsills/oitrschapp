@@ -57,7 +57,7 @@ $this->title = 'OIT Research Services Application';
                     ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                     fugiat nulla pariatur.</p>
 
-		<p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Manage/Request HPC Project</a></p>
+		<p><a class="btn btn-lg btn-success" href="/basic/web/index.php?r=hpc">Manage/Request HPC Project</a></p>
 <!---
                 <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
 --->
