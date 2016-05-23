@@ -79,6 +79,7 @@ AppAsset::register($this);
     </div>
 </div>
 
+<!---
 <footer class="footer">
     <div class="container">
         <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
@@ -86,6 +87,22 @@ AppAsset::register($this);
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
+--->
+
+<div class="sub-footer">
+     <div class="container">
+	<h4><a href="http://www.ncsu.edu/"><strong>NC STATE</strong> UNIVERSITY</a></h4>
+	<p class="pull-left">
+	<address>
+	<span><strong>NORTH CAROLINA STATE UNIVERSITY</strong></span>
+	<span>RALEIGH, NC 27695</span>
+	<span>919.515.2011</span>
+	</address></p>
+	<p class="pull-right">
+	&copy; <?php echo date('Y'); ?> NC State University
+	<p>
+	</div><!-- .container -->
+</div><!-- .sub-footer -->
 
 <?php $this->endBody() ?>
 </body>

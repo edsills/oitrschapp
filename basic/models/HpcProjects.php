@@ -12,6 +12,11 @@ use Yii;
  * @property string $project_type
  * @property string $group_name
  * @property integer $program_id
+ *
+ * @property HpcAccounts[] $hpcAccounts
+ * @property HpcUsers $userNumber
+ * @property HpcProgramIds $program
+ * @property HpcProjectTypes $projectType
  */
 class HpcProjects extends \yii\db\ActiveRecord
 {
@@ -33,6 +38,9 @@ class HpcProjects extends \yii\db\ActiveRecord
             [['project_id', 'user_number', 'program_id'], 'integer'],
             [['project_type'], 'string', 'max' => 2],
             [['group_name'], 'string', 'max' => 16],
+            [['user_number'], 'exist', 'skipOnError' => true, 'targetClass' => HpcUsers::className(), 'targetAttribute' => ['user_number' => 'user_number']],
+            [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => HpcProgramIds::className(), 'targetAttribute' => ['program_id' => 'program_id']],
+            [['project_type'], 'exist', 'skipOnError' => true, 'targetClass' => HpcProjectTypes::className(), 'targetAttribute' => ['project_type' => 'project_type']],
         ];
     }
 
@@ -48,6 +56,38 @@ class HpcProjects extends \yii\db\ActiveRecord
             'group_name' => 'Group Name',
             'program_id' => 'Program ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHpcAccounts()
+    {
+        return $this->hasMany(HpcAccounts::className(), ['project_id' => 'project_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserNumber()
+    {
+        return $this->hasOne(HpcUsers::className(), ['user_number' => 'user_number']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProgram()
+    {
+        return $this->hasOne(HpcProgramIds::className(), ['program_id' => 'program_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjectType()
+    {
+        return $this->hasOne(HpcProjectTypes::className(), ['project_type' => 'project_type']);
     }
 
     /**

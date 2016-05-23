@@ -6,6 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\db\Command;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\PI;
@@ -17,10 +18,15 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['login', 'index'],
                 'rules' => [
+		    [
+			'allow' => true,
+			'actions' => ['login'],
+			'roles' => ['?'],
+		    ],
                     [
-                        'actions' => ['logout'],
+			'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -50,7 +56,29 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+	$db = Yii::$app->db;
+	$unityid = Yii::$app->user->identity->username;
+/*
+	$cmd = "/usr/bin/whois -h whois.ncsu.edu username $unityid";
+	exec("$cmd",$result);
+*/
+	$result = ['empty'];
+	$ds = ldap_connect("ldap.ncsu.edu");
+	if ($ds) {
+	   $r = ldap_bind($ds);
+	   $sr = ldap_search($ds, "ou=accounts,dc=ncsu,dc=edu", 
+	        		  "uid=$unityid");
+	   $result = ldap_get_entries($ds, $sr);
+	   ldap_close($ds);
+	}
+	$sql = 'SELECT p.project_id, p.group_name FROM hpc_projects p, hpc_accounts a WHERE a.login = '."'".$unityid."'".' AND p.user_number = a.user_number ORDER BY p.project_id';
+
+	$projects = $db->createCommand($sql)->queryAll();
+	   	
+        return $this->render('index', [
+	       'result' => $result,
+               'projects' => $projects]
+	       );
     }
 
     public function actionLogin()
@@ -102,9 +130,9 @@ class SiteController extends Controller
 		      $modelCanSave = true;
 		   }
 
-		return $this->render('create', [
+		return $this->render('user', [
 		       'model' => $model,
-		       'modelSaved' => $modelCanSave
+		       'modelCanSave' => $modelCanSave
 		       ]);
 	}
 

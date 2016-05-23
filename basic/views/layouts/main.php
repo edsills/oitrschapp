@@ -41,11 +41,8 @@ AppAsset::register($this);
 
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => '',
         'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

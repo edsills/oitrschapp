@@ -13,12 +13,13 @@ use Yii;
  * @property string $middleinitial
  * @property string $lastname
  * @property string $position
- * @property integer $institution_id
- * @property string $department
+ * @property integer $department_id
  * @property string $email
  * @property string $phone
  *
- * @property HpcDepartments $department0
+ * @property HpcAccounts[] $hpcAccounts
+ * @property HpcProjects[] $hpcProjects
+ * @property HpcDepartments $department
  */
 class HpcUsers extends \yii\db\ActiveRecord
 {
@@ -36,14 +37,13 @@ class HpcUsers extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_number', 'firstname', 'lastname', 'institution_id', 'department'], 'required'],
-            [['user_number', 'institution_id'], 'integer'],
+            [['user_number', 'firstname', 'lastname'], 'required'],
+            [['user_number', 'department_id'], 'integer'],
             [['title'], 'string', 'max' => 10],
             [['firstname', 'lastname', 'position', 'email'], 'string', 'max' => 40],
             [['middleinitial'], 'string', 'max' => 1],
-            [['department'], 'string', 'max' => 100],
             [['phone'], 'string', 'max' => 20],
-            [['department', 'institution_id'], 'exist', 'skipOnError' => true, 'targetClass' => HpcDepartments::className(), 'targetAttribute' => ['department' => 'department', 'institution_id' => 'institution_id']],
+            [['department_id'], 'exist', 'skipOnError' => true, 'targetClass' => HpcDepartments::className(), 'targetAttribute' => ['department_id' => 'department_id']],
         ];
     }
 
@@ -59,8 +59,7 @@ class HpcUsers extends \yii\db\ActiveRecord
             'middleinitial' => 'Middleinitial',
             'lastname' => 'Lastname',
             'position' => 'Position',
-            'institution_id' => 'Institution ID',
-            'department' => 'Department',
+            'department_id' => 'Department ID',
             'email' => 'Email',
             'phone' => 'Phone',
         ];
@@ -69,9 +68,25 @@ class HpcUsers extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDepartment0()
+    public function getHpcAccounts()
     {
-        return $this->hasOne(HpcDepartments::className(), ['department' => 'department', 'institution_id' => 'institution_id']);
+        return $this->hasMany(HpcAccounts::className(), ['user_number' => 'user_number']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHpcProjects()
+    {
+        return $this->hasMany(HpcProjects::className(), ['user_number' => 'user_number']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDepartment()
+    {
+        return $this->hasOne(HpcDepartments::className(), ['department_id' => 'department_id']);
     }
 
     /**
